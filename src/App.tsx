@@ -29,6 +29,7 @@ const STORAGE_KEYS = {
   consultations: 'naeilteo_consultations_v2',
   fontSize: 'naeilteo_font_size_v1',
   highContrast: 'naeilteo_high_contrast_v1',
+  noticeHiddenUntil: 'naeilteo_notice_hidden_until_v1',
 };
 
 function readStorage<T>(key: string, fallback: T): T {
@@ -75,6 +76,10 @@ export default function App() {
   const [modalJob, setModalJob] = useState<JobPosting | null>(null);
   const [modalShowApply, setModalShowApply] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [showNoticePopup, setShowNoticePopup] = useState<boolean>(() => {
+    const hiddenUntil = readStorage<number>(STORAGE_KEYS.noticeHiddenUntil, 0);
+    return Date.now() > hiddenUntil;
+  });
 
   const jobListRef = useRef<HTMLDivElement | null>(null);
 
@@ -307,16 +312,8 @@ export default function App() {
               onToggleHighContrast={() => setHighContrast((prev) => !prev)}
               hasResume={Boolean(resume)}
               onOpenResume={() => setActiveTab('resume')}
+              onOpenNotice={() => setShowNoticePopup(true)}
               totalJobsCount={INITIAL_JOBS.length}
-            />
-
-            <RecruitmentNotice
-              onSelectCategoryAndScroll={(category) => {
-                setSelectedCategory(category);
-                window.setTimeout(() => {
-                  scrollToJobs();
-                }, 60);
-              }}
             />
 
             <IconCategoryMenu
@@ -501,6 +498,27 @@ export default function App() {
         onClose={() => setModalJob(null)}
         onToggleSave={handleToggleSave}
         onSubmitApplication={handleSubmitApplication}
+      />
+
+      <RecruitmentNotice
+        isOpen={showNoticePopup}
+        onClose={() => setShowNoticePopup(false)}
+        onDismissForToday={() => {
+          const until = Date.now() + 24 * 60 * 60 * 1000;
+          window.localStorage.setItem(
+            STORAGE_KEYS.noticeHiddenUntil,
+            JSON.stringify(until)
+          );
+          setShowNoticePopup(false);
+          showToast('모집 공고 팝업을 하루 동안 표시하지 않습니다.');
+        }}
+        onSelectCategoryAndScroll={(category) => {
+          setActiveTab('jobs');
+          setSelectedCategory(category);
+          window.setTimeout(() => {
+            scrollToJobs();
+          }, 80);
+        }}
       />
     </div>
   );

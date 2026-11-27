@@ -6,6 +6,7 @@ import {
   FileEdit,
   Briefcase,
   Check,
+  Megaphone,
 } from 'lucide-react';
 import { FontSizeLevel } from '../types/job';
 
@@ -19,6 +20,7 @@ interface HeroSearchProps {
   onToggleHighContrast: () => void;
   hasResume: boolean;
   onOpenResume: () => void;
+  onOpenNotice: () => void;
   totalJobsCount: number;
 }
 
@@ -32,6 +34,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
   onToggleHighContrast,
   hasResume,
   onOpenResume,
+  onOpenNotice,
   totalJobsCount,
 }) => {
   const [imageError, setImageError] = useState(false);
@@ -181,17 +184,28 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
             </button>
           </div>
 
-          {/* Quick Resume Action */}
-          <button
-            type="button"
-            onClick={onOpenResume}
-            className="inline-flex items-center gap-2 px-5 py-2.5 min-h-[48px] rounded-xl border-2 border-[#0b3b8c] bg-blue-50 hover:bg-blue-100 text-[#0b3b8c] text-base font-bold whitespace-nowrap shrink-0 cursor-pointer transition-colors"
-          >
-            <FileEdit className="w-5 h-5 shrink-0" />
-            <span>
-              {hasResume ? '내 간편 이력서 수정하기' : '3분 간편 이력서 작성하기'}
-            </span>
-          </button>
+          {/* Quick Actions: Recruitment Popup & Resume */}
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={onOpenNotice}
+              className="inline-flex items-center gap-2 px-5 py-2.5 min-h-[48px] rounded-xl border-2 border-[#0b3b8c] bg-[#0b3b8c] hover:bg-[#082b68] text-white text-base font-bold whitespace-nowrap shrink-0 cursor-pointer transition-colors"
+            >
+              <Megaphone className="w-5 h-5 shrink-0" />
+              <span>2027년 모집 공고 보기</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={onOpenResume}
+              className="inline-flex items-center gap-2 px-5 py-2.5 min-h-[48px] rounded-xl border-2 border-[#0b3b8c] bg-blue-50 hover:bg-blue-100 text-[#0b3b8c] text-base font-bold whitespace-nowrap shrink-0 cursor-pointer transition-colors"
+            >
+              <FileEdit className="w-5 h-5 shrink-0" />
+              <span>
+                {hasResume ? '내 간편 이력서 수정하기' : '3분 간편 이력서 작성하기'}
+              </span>
+            </button>
+          </div>
         </div>
       </div>
     </section>
