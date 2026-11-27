@@ -1,0 +1,6 @@
+{
+  "name": "내일터 — 중장년 맞춤 일자리",
+  "description": "중장년층이 보기 쉽고 접근하기 편한 큰 글자, 직관적 아이콘 메뉴 기반의 구직 웹사이트입니다.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
